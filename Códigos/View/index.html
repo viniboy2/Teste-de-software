@@ -33,34 +33,52 @@
             <p class="text-cyan-400 text-sm font-medium mt-2 uppercase tracking-widest">Portal de Gestão Escolar</p>
         </div>
 
-        <form action="dashboard.html" method="GET" class="space-y-6">
+        <form onsubmit="login(event)" class="space-y-6">
+
             <div>
-                <label class="block text-gray-300 text-sm mb-2 font-medium">E-mail Institucional</label>
-                <input type="email" required 
-                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
-                    placeholder="nome@educacao.df.gov.br">
+                <label class="block text-gray-300 text-sm mb-2 font-medium">
+                E-mail Institucional
+                </label>
+                <input 
+                type="email" 
+                id="email" 
+                    required 
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                placeholder="nome@educacao.df.gov.br"
+            >
             </div>
 
             <div>
-                <label class="block text-gray-300 text-sm mb-2 font-medium">Palavra-passe</label>
-                <input type="password" required 
+            <label class="block text-gray-300 text-sm mb-2 font-medium">
+                Palavra-passe
+                </label>
+                    <input 
+                    type="password" 
+                    id="senha" 
+                    required 
                     class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
-                    placeholder="••••••••">
+                    placeholder="••••••••"
+            >
             </div>
 
             <div class="flex items-center justify-between text-xs text-gray-400">
                 <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" class="mr-2 accent-cyan-500"> Lembrar-me
+                    <input type="checkbox" class="mr-2 accent-cyan-500">
+                    Lembrar-me
                 </label>
-                <a href="#" class="hover:text-cyan-400 transition-colors">Esqueceu a senha?</a>
+                <a href="#" class="hover:text-cyan-400 transition-colors">
+                Esqueceu a senha?
+                </a>
             </div>
 
-            <button type="submit" 
-                class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20 transform transition-all active:scale-95">
+            <button 
+                type="submit" 
+                class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20 transform transition-all active:scale-95"
+            >
                 Aceder ao Sistema
             </button>
-        </form>
 
+    </form>
         <div class="mt-8 pt-6 border-t border-white/10 text-center">
             <p class="text-gray-500 text-xs">
                 © 2026 Secretaria de Educação DF <br>
@@ -68,6 +86,36 @@
             </p>
         </div>
     </div>
+
+    <script>
+function login(event) {
+    event.preventDefault();
+
+    fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: document.getElementById("email").value,
+            senha: document.getElementById("senha").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.tipo === "ADMIN") {
+            window.location.href = "dashboard.html";
+        } else if (data.tipo === "PROFESSOR") {
+            window.location.href = "dashboard.html";
+        } else if (data.tipo === "ALUNO") {
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Usuário inválido");
+        }
+    })
+    .catch(() => alert("Erro ao conectar com o servidor"));
+}
+</script>
 
 </body>
 </html>
