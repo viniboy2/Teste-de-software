@@ -15,7 +15,8 @@ Códigos/
 ```
 
 ## Tecnologias
-
+- HTML5
+- tailwindcss
 - Python 3.12
 - Flask
 - PyMySQL
