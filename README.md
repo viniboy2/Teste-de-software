@@ -9,8 +9,8 @@ Códigos/
 |   |-- models/
 |   |-- routes/
 |   |-- static/
+|   |   `-- css/
 |   |   `-- js/
-|   |       `-- login.js
 |   |-- templates/
 |   `-- views/
 `-- database/
