@@ -9,7 +9,7 @@ Códigos/
 |   |-- models/
 |   |-- routes/
 |   |-- static/
-|   |   `-- css/
+|   |   |-- css/
 |   |   `-- js/
 |   |-- templates/
 |   `-- views/
