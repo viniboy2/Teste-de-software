@@ -9,6 +9,8 @@ Códigos/
 |   |-- models/
 |   |-- routes/
 |   |-- static/
+|   |   `-- js/
+|   |       `-- login.js
 |   |-- templates/
 |   `-- views/
 `-- database/
@@ -27,7 +29,14 @@ Códigos/
 
 - Docker
 - Docker Compose
+Para instalar o Docker Desktop siga o passo a passo abaixo:
 
+1. Abra https://www.docker.com/products/docker-desktop no seu navegador.
+2. Clique em **Download for Windows/Mac** (ou selecione o instalador Linux se estiver em WSL) e faça o download do instalador adequado à sua plataforma.
+3. Execute o instalador e siga as instruções na tela; mantenha as opções padrão a menos que precise de uma configuração específica.
+4. Ao finalizar, abra o Docker Desktop e aguarde ele inicializar completamente (ícone na bandeja indicando que o daemon está ativo).
+5. Caso necessário, faça login com sua conta Docker ou crie uma gratuita para acessar recursos extras.
+6. Verifique se o Docker e o Compose estão funcionando executando `docker version` e `docker compose version` no terminal.
 ## Como executar
 
 1. Entre na pasta [`Códigos`](/home/roberto/Documents/GitHub/Teste-de-software/Códigos).
@@ -70,4 +79,5 @@ No ambiente Docker, essas variáveis são definidas em [docker-compose.yml](/hom
 - `app/views`: centraliza a renderização das respostas
 - `app/templates`: armazena os templates HTML
 - `app/static`: guarda arquivos estáticos como CSS, JavaScript e imagens
+  (ex.: `js/login.js` concentra o script de login usado em `templates/index.html`)
 - `database`: reúne scripts e artefatos relacionados ao banco de dados
