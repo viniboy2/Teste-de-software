@@ -1,60 +1,80 @@
-{% extends "partials/base.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Secretaria Escolar DF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body class="flex items-center justify-center">
 
-{% block title %}{{ title }}{% endblock %}
+    <div class="absolute top-10 left-10 w-64 h-64 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-10 right-10 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
 
-{% block content %}
-<main>
-    <section>
-        <h1>{{ placeholder }}</h1>
-        <h2>{{ title }}</h2>
-        <p>{{ subtitle }}</p>
+    <div class="glass-effect p-10 rounded-[32px] shadow-2xl w-full max-w-md z-10">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-white tracking-tight">Secretaria DF</h1>
+            <p class="text-cyan-400 text-sm font-medium mt-2 uppercase tracking-widest">Portal de Gestão Escolar</p>
+        </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <section>
-                    {% for category, message in messages %}
-                        <p><strong>{{ category|capitalize }}:</strong> {{ message }}</p>
-                    {% endfor %}
-                </section>
-            {% endif %}
-        {% endwith %}
+        <form onsubmit="login(event)" class="space-y-6">
 
-        <form method="post" action="{{ url_for('home.index') }}">
             <div>
-                <label for="name">Nome</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ form_data.get('name', '') }}"
-                    placeholder="Digite seu nome"
-                >
+                <label class="block text-gray-300 text-sm mb-2 font-medium">
+                E-mail Institucional
+                </label>
+                <input 
+                type="email" 
+                id="email" 
+                    required 
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                placeholder="nome@educacao.df.gov.br"
+            >
             </div>
 
             <div>
-                <label for="email">E-mail</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="{{ form_data.get('email', '') }}"
-                    placeholder="Digite seu e-mail"
-                >
+            <label class="block text-gray-300 text-sm mb-2 font-medium">
+                Palavra-passe
+                </label>
+                    <input 
+                    type="password" 
+                    id="senha" 
+                    required 
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                    placeholder="••••••••"
+            >
             </div>
 
-            <div>
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" placeholder="Digite sua senha">
+            <div class="flex items-center justify-between text-xs text-gray-400">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" class="mr-2 accent-cyan-500">
+                    Lembrar-me
+                </label>
+                <a href="#" class="hover:text-cyan-400 transition-colors">
+                Esqueceu a senha?
+                </a>
             </div>
 
-            <div>
-                <button type="submit">Cadastrar</button>
-            </div>
-        </form>
+            <button 
+                type="submit" 
+                class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20 transform transition-all active:scale-95"
+            >
+                Aceder ao Sistema
+            </button>
 
-        <p>
-            Este formulario grava os dados na tabela <code>users</code> do banco configurado.
-        </p>
-    </section>
-</main>
-{% endblock %}
+            <p id="login-error" class="text-sm text-red-400 mt-2 hidden"></p>
+    </form>
+        <div class="mt-8 pt-6 border-t border-white/10 text-center">
+            <p class="text-gray-500 text-xs">
+                © 2026 Secretaria de Educação DF <br>
+                Acesso restrito a funcionários e alunos.
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</body>
+</html>

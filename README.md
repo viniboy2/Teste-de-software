@@ -9,6 +9,8 @@ Códigos/
 |   |-- models/
 |   |-- routes/
 |   |-- static/
+|   |   |-- css/
+|   |   `-- js/
 |   |-- templates/
 |   `-- views/
 `-- database/
@@ -27,6 +29,15 @@ Códigos/
 
 - Docker
 - Docker Compose
+
+Para instalar o Docker Desktop siga o passo a passo abaixo:
+
+1. Abra https://www.docker.com/products/docker-desktop no seu navegador.
+2. Clique em **Download for Windows/Mac** (ou selecione o instalador Linux se estiver em WSL) e faça o download do instalador adequado à sua plataforma.
+3. Execute o instalador e siga as instruções na tela; mantenha as opções padrão a menos que precise de uma configuração específica.
+4. Ao finalizar, abra o Docker Desktop e aguarde ele inicializar completamente (ícone na bandeja indicando que o daemon está ativo).
+5. Caso necessário, faça login com sua conta Docker ou crie uma gratuita para acessar recursos extras.
+6. Verifique se o Docker e o Compose estão funcionando executando `docker version` e `docker compose version` no terminal.
 
 ## Como executar
 
@@ -47,7 +58,13 @@ docker compose up --build
 
 ## Banco de dados
 
-O banco é criado a partir de [schema.sql](/home/roberto/Documents/GitHub/Teste-de-software/Códigos/database/schema.sql).
+O banco é criado a partir de [schema.sql](/home/roberto/Documents/GitHub/Teste-de-software/Códigos/database/schema.sql). Para acessar via MySQL Workbench siga:
+
+1. Garanta que o container `db` esteja iniciado (`docker compose up -d` no diretório `Códigos`).
+2. Abra o MySQL Workbench e clique em **New Connection**.
+3. Configure a conexão com host `localhost`, porta `3306` e o usuário/senha definidos no `docker-compose.yml`.
+4. Clique em **Test Connection** para validar e, depois, em **OK** para salvar.
+5. Após conectar, você pode explorar o banco, criar tabelas e executar consultas a partir da interface gráfica.
 
 ## Configuração
 
