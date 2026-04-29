@@ -23,6 +23,7 @@ Códigos/
 - Tailwind CSS
 - Python 3.12
 - Flask
+- SQLAlchemy (ORM)
 - PyMySQL
 - cryptography
 - MySQL 8.4
@@ -84,7 +85,7 @@ Credenciais padrão geradas pelo script de seed (recomenda-se alterar para maior
 
 ## Banco de dados
 
-O banco é criado a partir de `database/schema.sql`.
+As tabelas são criadas automaticamente pelo ORM (SQLAlchemy) na inicialização da aplicação.
 
 Importante:
 - As variáveis `MYSQL_*` e criação de usuário/banco são aplicadas na primeira inicialização do volume do MySQL.

@@ -1,19 +1,22 @@
 from werkzeug.security import generate_password_hash
 
-from app.database import get_connection
+from app.database import get_session
+from app.models import UsuarioModel
 
 
 def run_seed():
-    usuarios = [
-        ("admin@admin.com", generate_password_hash("123"), "ADMIN")
-    ]
-
-    with get_connection() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute("DELETE FROM usuarios")
-            cursor.executemany(
-                "INSERT INTO usuarios (email, senha, tipo) VALUES (%s, %s, %s)", usuarios
-            )
+    session = get_session()
+    try:
+        session.query(UsuarioModel).delete()
+        admin = UsuarioModel(
+            email="admin@admin.com",
+            senha=generate_password_hash("123"),
+            tipo="ADMIN",
+        )
+        session.add(admin)
+        session.commit()
+    finally:
+        session.close()
 
     print("Usuários criados com sucesso!")
 
