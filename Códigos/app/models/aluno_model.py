@@ -17,6 +17,7 @@ class AlunoModel(Base):
         nullable=False,
     )
     nome: Mapped[str] = mapped_column(String(120), nullable=False)
+    cpf: Mapped[str | None] = mapped_column(String(14), unique=True, nullable=True)
     matricula: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
     data_nascimento: Mapped[date | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[str] = mapped_column(TIMESTAMP, server_default=func.current_timestamp())
