@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Secretaria DF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; }
+        .glass-sidebar { background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); border-right: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="flex">
+    <aside class="w-72 glass-sidebar h-screen p-6">
+        <h2 class="text-cyan-400 font-bold mb-10 text-center">SECRETARIA DF</h2>
+        <nav class="space-y-4">
+            <a href="dashboard.html" class="block p-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Painel Geral</a>
+            <a href="cadastro_aluno.html" class="block p-3 rounded-xl text-gray-400 hover:text-white">Alunos</a>
+            <a href="cadastro_professores.html" class="block p-3 rounded-xl text-gray-400 hover:text-white">Professores</a>
+            <a href="detalhes_aluno.html" class="block p-3 rounded-xl text-gray-400 hover:text-white">Consulta Detalhada</a>
+            <a href="index.html" class="block p-3 mt-10 text-red-400">Sair</a>
+        </nav>
+    </aside>
+    <main class="flex-1 p-10">
+        <h1 class="text-3xl font-bold mb-8">Olá, Administrador!</h1>
+        <div class="grid grid-cols-3 gap-6">
+            <div class="bg-white/5 border border-white/10 p-6 rounded-3xl"><h3>Alunos Ativos</h3><p class="text-4xl font-bold text-cyan-400">1,248</p></div>
+            <div class="bg-white/5 border border-white/10 p-6 rounded-3xl"><h3>Professores</h3><p class="text-4xl font-bold text-purple-400">86</p></div>
+            <div class="bg-white/5 border border-white/10 p-6 rounded-3xl"><h3>Pendências</h3><p class="text-4xl font-bold text-red-400">05</p></div>
+        </div>
+    </main>
+</body>
+</html>
