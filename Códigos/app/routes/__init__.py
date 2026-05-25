@@ -1,7 +1,11 @@
-from app.controllers.home_controller import home_blueprint
+from app.routes.document_routes import document_bp
+from app.routes.home_routes import home_blueprint
 from app.routes.auth_routes import auth_bp
+from app.routes.student_routes import student_bp
 
 
 def register_routes(app):
     app.register_blueprint(home_blueprint)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(document_bp)
+    app.register_blueprint(student_bp)

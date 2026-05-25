@@ -1,0 +1,150 @@
+.detalhes-card:hover {
+    transform: none;
+}
+
+.document-request-form {
+    display: grid;
+    gap: 16px;
+}
+
+.student-edit-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 24px;
+    text-align: left;
+}
+
+.student-edit-form h3 {
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.student-edit-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.document-request-form label span,
+.student-edit-form label span {
+    display: block;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.document-request-form input,
+.document-request-form textarea,
+.student-edit-form input,
+.student-edit-form select {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    outline: none;
+}
+
+.document-request-form input,
+.student-edit-form input,
+.student-edit-form select {
+    min-height: 48px;
+    padding: 0 16px;
+}
+
+.student-edit-form select option {
+    background: #111827;
+    color: white;
+}
+
+.document-request-form textarea {
+    min-height: 110px;
+    padding: 14px 16px;
+    resize: vertical;
+}
+
+.document-request-form input::placeholder,
+.document-request-form textarea::placeholder,
+.student-edit-form input::placeholder {
+    color: rgba(156, 163, 175, 0.78);
+}
+
+.document-request-form button,
+.student-edit-form button {
+    justify-self: end;
+    min-height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #06b6d4, #2563eb);
+    padding: 0 24px;
+    color: white;
+    font-weight: 800;
+}
+
+.document-request-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+}
+
+.document-status {
+    display: inline-flex;
+    min-width: 78px;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.document-status-pendente {
+    border: 1px solid rgba(250, 204, 21, 0.28);
+    color: #facc15;
+}
+
+.document-status-enviado {
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    color: #22d3ee;
+}
+
+@media (max-width: 768px) {
+    body {
+        display: block;
+    }
+
+    aside {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        padding: 24px;
+    }
+
+    .document-request-form button {
+        width: 100%;
+    }
+
+    .student-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-edit-form button {
+        width: 100%;
+    }
+
+    .document-request-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

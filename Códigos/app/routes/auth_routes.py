@@ -1,23 +1,63 @@
-import os
+from flask import Blueprint, jsonify, redirect, request, session, url_for
 
-from flask import Blueprint, current_app, jsonify, request, send_from_directory
-from werkzeug.utils import secure_filename
-
-from app.auth import jwt_required, professor_required
+from app.auth import professor_required
 from app.controllers.auth_controller import buscar_alunos, cadastrar_usuario, login_usuario
+from app.routes.guards import admin_json_required
 
 auth_bp = Blueprint('auth', __name__)
+
+
+def _admin_session_required():
+    return admin_json_required()
+
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
     response, status = login_usuario(data)
+    if status == 200:
+        session["user_id"] = response["id"]
+        session["user_email"] = response["email"]
+        session["user_role"] = response["role"]
+
     return jsonify(response), status
+
+
+@auth_bp.route('/logout', methods=['GET'])
+def logout():
+    session.clear()
+    return redirect(url_for("home.home"))
 
 
 @auth_bp.route('/cadastro', methods=['POST'])
 def cadastro():
     data = request.json
+    response, status = cadastrar_usuario(data)
+    return jsonify(response), status
+
+
+@auth_bp.route('/cadastro/aluno', methods=['POST'])
+@auth_bp.route('/cadastro/alunos', methods=['POST'])
+def cadastro_aluno():
+    error_response = _admin_session_required()
+    if error_response:
+        return error_response
+
+    data = request.json or {}
+    data["tipo"] = "aluno"
+    response, status = cadastrar_usuario(data)
+    return jsonify(response), status
+
+
+@auth_bp.route('/cadastro/professor', methods=['POST'])
+@auth_bp.route('/cadastro/professores', methods=['POST'])
+def cadastro_professor():
+    error_response = _admin_session_required()
+    if error_response:
+        return error_response
+
+    data = request.json or {}
+    data["tipo"] = "professor"
     response, status = cadastrar_usuario(data)
     return jsonify(response), status
 
@@ -35,31 +75,3 @@ def alunos_busca():
     termo = request.args.get("termo") or request.args.get("q") or request.args.get("cpf")
     response, status = buscar_alunos(termo)
     return jsonify(response), status
-
-
-@auth_bp.route('/arquivos/upload', methods=['POST'])
-@professor_required
-def upload_arquivo():
-    if "arquivo" not in request.files:
-        return jsonify({"erro": "Arquivo nao enviado"}), 400
-
-    arquivo = request.files["arquivo"]
-    if not arquivo.filename:
-        return jsonify({"erro": "Nome do arquivo nao informado"}), 400
-
-    upload_folder = current_app.config["UPLOAD_FOLDER"]
-    os.makedirs(upload_folder, exist_ok=True)
-
-    # Estrutura inicial: salva o arquivo fisico e devolve o nome para download posterior.
-    filename = secure_filename(arquivo.filename)
-    arquivo.save(os.path.join(upload_folder, filename))
-
-    return jsonify({"mensagem": "Arquivo enviado", "arquivo": filename}), 201
-
-
-@auth_bp.route('/arquivos/download/<path:filename>', methods=['GET'])
-@jwt_required
-def download_arquivo(filename):
-    # Download exige JWT valido, mas pode ser usado por professor ou aluno autenticado.
-    upload_folder = current_app.config["UPLOAD_FOLDER"]
-    return send_from_directory(upload_folder, secure_filename(filename), as_attachment=True)

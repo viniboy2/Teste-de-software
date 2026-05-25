@@ -91,6 +91,12 @@ def cadastrar_usuario(data):
                     nome=nome,
                     cpf=cpf,
                     telefone=data.get("telefone"),
+                    disciplina_principal=(
+                        data.get("disciplina_principal") or data.get("disciplina")
+                    ),
+                    formacao_academica=data.get("formacao_academica") or data.get("formacao"),
+                    regime_trabalho=data.get("regime_trabalho") or data.get("regime"),
+                    data_admissao=_parse_date(data.get("data_admissao") or data.get("admissao")),
                 )
             )
         else:
@@ -106,6 +112,8 @@ def cadastrar_usuario(data):
                     nome=nome,
                     cpf=cpf,
                     matricula=matricula,
+                    curso_serie=data.get("curso_serie") or data.get("curso"),
+                    status_matricula=data.get("status_matricula") or data.get("status"),
                     data_nascimento=_parse_date(data.get("data_nascimento")),
                 )
             )

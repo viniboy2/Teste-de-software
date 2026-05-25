@@ -9,11 +9,15 @@ services:
       - "5000:5000"
     environment:
       SECRET_KEY: ${SECRET_KEY:?Defina SECRET_KEY no arquivo .env}
+      UPLOAD_FOLDER: ${UPLOAD_FOLDER:-uploads}
       DB_HOST: db
       DB_PORT: ${DB_PORT:-3306}
       DB_USER: ${DB_USER:-app_user}
       DB_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD no arquivo .env}
       DB_NAME: ${DB_NAME:-app_web}
+    volumes:
+      - .:/app
+      - uploads_data:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -40,3 +44,4 @@ services:
 
 volumes:
   mysql_data:
+  uploads_data:

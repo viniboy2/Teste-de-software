@@ -9,7 +9,7 @@ class DocumentoModel(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     aluno_id: Mapped[int] = mapped_column(Integer, ForeignKey("alunos.id"), nullable=False)
-    professor_id: Mapped[int] = mapped_column(Integer, ForeignKey("professores.id"), nullable=False)
+    professor_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("professores.id"), nullable=True)
     disciplina_id: Mapped[int] = mapped_column(Integer, ForeignKey("disciplinas.id"), nullable=False)
     titulo: Mapped[str] = mapped_column(String(150), nullable=False)
     caminho_arquivo: Mapped[str] = mapped_column(String(255), nullable=False)

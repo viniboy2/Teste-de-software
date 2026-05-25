@@ -26,12 +26,16 @@ function login(event) {
         return res.json();
     })
     .then(data => {
-        if (["ADMIN", "PROFESSOR", "ALUNO"].includes(data.tipo)) {
-            window.location.href = "/dashboard";
+        if (data.tipo === "ADMIN") {
+            window.location.href = "/admin/dashboard";
+            return;
+        }
+        if (data.tipo === "ALUNO") {
+            window.location.href = "/aluno";
             return;
         }
 
-        throw new Error("Usuário inválido");
+        throw new Error("Tipo de usuário sem área configurada");
     })
     .catch(error => {
         errorEl.textContent = error.message || "Erro ao conectar com o servidor";

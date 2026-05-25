@@ -1,0 +1,171 @@
+.student-card:hover {
+    transform: none;
+}
+
+.student-table-wrapper {
+    overflow-x: auto;
+}
+
+.student-table-wrapper table {
+    min-width: 720px;
+}
+
+.student-doc-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+}
+
+.student-request-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 18px;
+}
+
+.student-request-item h3 {
+    margin: 0;
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.student-request-item p {
+    margin: 6px 0 0;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.student-request-item span {
+    display: block;
+    margin-top: 8px;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.student-request-status {
+    align-self: start;
+    min-width: 78px;
+    border-radius: 999px;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.student-request-status-pendente {
+    border: 1px solid rgba(250, 204, 21, 0.28);
+    color: #facc15;
+}
+
+.student-request-status-enviado {
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    color: #22d3ee;
+}
+
+.student-request-upload {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px;
+    gap: 12px;
+    align-items: center;
+}
+
+.student-doc-item h3 {
+    margin: 0;
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.student-doc-item p {
+    margin: 5px 0 0;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.student-doc-item a {
+    color: #67e8f9;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.student-field,
+.student-file {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    outline: none;
+}
+
+.student-field {
+    padding: 0 16px;
+}
+
+.student-field::placeholder {
+    color: rgba(156, 163, 175, 0.78);
+}
+
+.student-file {
+    padding: 10px;
+    font-size: 13px;
+    color: #d1d5db;
+}
+
+.student-file::file-selector-button {
+    margin-right: 12px;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 7px 12px;
+    color: white;
+    font-weight: 700;
+}
+
+.student-submit {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 24px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #06b6d4, #2563eb);
+    color: white;
+    font-weight: 800;
+}
+
+.student-submit.compact {
+    margin-top: 0;
+    min-height: 46px;
+}
+
+@media (max-width: 768px) {
+    body {
+        display: block;
+    }
+
+    aside {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        padding: 24px;
+    }
+
+    .student-request-item,
+    .student-request-upload {
+        grid-template-columns: 1fr;
+    }
+}
