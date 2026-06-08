@@ -11,6 +11,13 @@ def _admin_session_required():
     return admin_json_required()
 
 
+def _get_request_data():
+    if request.form:
+        return request.form.copy()
+
+    return request.get_json(silent=True) or {}
+
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -31,8 +38,8 @@ def logout():
 
 @auth_bp.route('/cadastro', methods=['POST'])
 def cadastro():
-    data = request.json
-    response, status = cadastrar_usuario(data)
+    data = _get_request_data()
+    response, status = cadastrar_usuario(data, request.files)
     return jsonify(response), status
 
 
@@ -43,9 +50,9 @@ def cadastro_aluno():
     if error_response:
         return error_response
 
-    data = request.json or {}
+    data = _get_request_data()
     data["tipo"] = "aluno"
-    response, status = cadastrar_usuario(data)
+    response, status = cadastrar_usuario(data, request.files)
     return jsonify(response), status
 
 
@@ -56,9 +63,9 @@ def cadastro_professor():
     if error_response:
         return error_response
 
-    data = request.json or {}
+    data = _get_request_data()
     data["tipo"] = "professor"
-    response, status = cadastrar_usuario(data)
+    response, status = cadastrar_usuario(data, request.files)
     return jsonify(response), status
 
 

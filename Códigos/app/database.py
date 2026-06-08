@@ -32,6 +32,7 @@ def _ensure_schema_updates():
                 "cpf": "VARCHAR(14) NULL",
                 "curso_serie": "VARCHAR(80) NULL",
                 "status_matricula": "VARCHAR(20) NULL",
+                "foto_perfil": "VARCHAR(255) NULL",
             },
         )
 
@@ -43,12 +44,38 @@ def _ensure_schema_updates():
                 "disciplina_principal": "VARCHAR(80) NULL",
                 "formacao_academica": "VARCHAR(120) NULL",
                 "regime_trabalho": "VARCHAR(50) NULL",
+                "foto_perfil": "VARCHAR(255) NULL",
                 "data_admissao": "DATE NULL",
             },
         )
 
     if "documentos" in table_names:
+        _make_nullable_if_needed(inspector, "documentos", "aluno_id", "INTEGER NULL")
         _make_nullable_if_needed(inspector, "documentos", "professor_id", "INTEGER NULL")
+
+    if "solicitacoes_documentos" in table_names:
+        _add_missing_columns(
+            inspector,
+            "solicitacoes_documentos",
+            {
+                "professor_id": "INTEGER NULL",
+            },
+        )
+        _make_nullable_if_needed(
+            inspector,
+            "solicitacoes_documentos",
+            "aluno_id",
+            "INTEGER NULL",
+        )
+
+    if "atividades" in table_names:
+        _add_missing_columns(
+            inspector,
+            "atividades",
+            {
+                "caminho_arquivo": "VARCHAR(255) NULL",
+            },
+        )
 
 
 def _add_missing_columns(inspector, table_name, columns_to_add):

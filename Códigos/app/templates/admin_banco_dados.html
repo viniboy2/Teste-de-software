@@ -38,6 +38,9 @@
             <a href="{{ url_for('home.admin_disciplinas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
                 <span>📚</span> Disciplinas
             </a>
+            <a href="{{ url_for('home.admin_turmas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
+                <span>🏫</span> Turmas
+            </a>
             <a href="{{ url_for('home.admin_comunicados') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
                 <span>📢</span> Comunicados
             </a>
@@ -71,11 +74,16 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
             <div class="glass-card p-6 rounded-3xl">
                 <p class="text-gray-400 text-sm">Registros de Alunos</p>
                 <h2 class="text-4xl font-bold mt-2">{{ total_alunos }}</h2>
                 <div class="mt-4 text-xs text-green-400">Base acadêmica ativa</div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl">
+                <p class="text-gray-400 text-sm">Registros de Professores</p>
+                <h2 class="text-4xl font-bold mt-2">{{ total_professores }}</h2>
+                <div class="mt-4 text-xs text-cyan-400">Equipe docente</div>
             </div>
             <div class="glass-card p-6 rounded-3xl">
                 <p class="text-gray-400 text-sm">Pendências</p>
@@ -93,19 +101,18 @@
             <div class="flex flex-col gap-4 mb-6 xl:flex-row xl:items-center xl:justify-between">
                 <div>
                     <h3 class="text-xl font-bold">Registros Acadêmicos</h3>
-                    <p class="text-sm text-gray-400">Filtre por matrícula, aluno, curso ou status.</p>
+                    <p class="text-sm text-gray-400">Filtre por nome, e-mail, matrícula, CPF ou tipo.</p>
                 </div>
 
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <label class="database-search">
                         <span>🔎</span>
-                        <input type="search" placeholder="Pesquisar por nome ou ID...">
+                        <input id="database-search-input" type="search" placeholder="Pesquisar por nome ou ID...">
                     </label>
-                    <select class="database-select" aria-label="Curso">
-                        <option>Todos os Cursos</option>
-                        <option>1º Ano</option>
-                        <option>2º Ano</option>
-                        <option>3º Ano</option>
+                    <select id="database-type-select" class="database-select" aria-label="Tipo de registro">
+                        <option value="todos">Todos os Tipos</option>
+                        <option value="aluno">Alunos</option>
+                        <option value="professor">Professores</option>
                     </select>
                 </div>
             </div>
@@ -114,37 +121,93 @@
                 <table class="w-full text-left">
                     <thead>
                         <tr class="text-gray-500 text-xs uppercase tracking-wider">
-                            <th class="pb-4 font-medium">Matrícula</th>
-                            <th class="pb-4 font-medium">Nome do Aluno</th>
-                            <th class="pb-4 font-medium">Curso</th>
+                            <th class="pb-4 font-medium">Identificação</th>
+                            <th class="pb-4 font-medium">Nome</th>
+                            <th class="pb-4 font-medium">Tipo</th>
+                            <th class="pb-4 font-medium">Detalhe</th>
                             <th class="pb-4 font-medium">Status</th>
                             <th class="pb-4 font-medium text-right">Ação</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm">
                         {% for aluno in alunos %}
-                        <tr class="border-t border-white/5">
+                        <tr class="border-t border-white/5 database-row" data-type="aluno" data-search="{{ aluno.matricula }} {{ aluno.nome }} {{ aluno.email }} {{ aluno.curso }} {{ aluno.status }}">
                             <td class="py-4 font-medium text-white">{{ aluno.matricula }}</td>
                             <td class="py-4">
                                 <span class="block font-medium text-white">{{ aluno.nome }}</span>
                                 <span class="text-xs text-gray-500">{{ aluno.email }}</span>
                             </td>
+                            <td class="py-4"><span class="type-pill type-student">Aluno</span></td>
                             <td class="py-4 text-gray-400">{{ aluno.curso }}</td>
                             <td class="py-4"><span class="status-pill {{ aluno.status_class }}">{{ aluno.status }}</span></td>
                             <td class="py-4 text-right">
                                 <a href="{{ url_for('home.admin_detalhes_aluno', aluno_id=aluno.id) }}" class="database-row-button">Gerir</a>
                             </td>
                         </tr>
-                        {% else %}
-                        <tr class="border-t border-white/5">
-                            <td class="py-6 text-gray-400" colspan="5">Nenhum aluno cadastrado.</td>
+                        {% endfor %}
+
+                        {% for professor in professores %}
+                        <tr class="border-t border-white/5 database-row" data-type="professor" data-search="{{ professor.id }} {{ professor.nome }} {{ professor.email }} {{ professor.cpf }} {{ professor.disciplina }}">
+                            <td class="py-4 font-medium text-white">PROF-{{ professor.id }}</td>
+                            <td class="py-4">
+                                <span class="block font-medium text-white">{{ professor.nome }}</span>
+                                <span class="text-xs text-gray-500">{{ professor.email }}</span>
+                            </td>
+                            <td class="py-4"><span class="type-pill type-teacher">Professor</span></td>
+                            <td class="py-4 text-gray-400">{{ professor.disciplina }}</td>
+                            <td class="py-4"><span class="status-pill status-active">Ativo</span></td>
+                            <td class="py-4 text-right">
+                                <a href="{{ url_for('home.admin_detalhes_professor', professor_id=professor.id) }}" class="database-row-button">Gerir</a>
+                            </td>
                         </tr>
                         {% endfor %}
+
+                        <tr id="database-empty-row" class="hidden border-t border-white/5">
+                            <td class="py-6 text-gray-400" colspan="6">Nenhum registro encontrado para o filtro selecionado.</td>
+                        </tr>
+
+                        {% if not alunos and not professores %}
+                        <tr class="border-t border-white/5">
+                            <td class="py-6 text-gray-400" colspan="6">Nenhum registro cadastrado.</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
+    <script>
+        const databaseSearchInput = document.getElementById("database-search-input");
+        const databaseTypeSelect = document.getElementById("database-type-select");
+        const databaseRows = Array.from(document.querySelectorAll(".database-row"));
+        const databaseEmptyRow = document.getElementById("database-empty-row");
+
+        function filterDatabaseRows() {
+            const searchTerm = databaseSearchInput.value.trim().toLowerCase();
+            const selectedType = databaseTypeSelect.value;
+            let visibleRows = 0;
+
+            databaseRows.forEach(function (row) {
+                const rowType = row.dataset.type;
+                const rowSearch = (row.dataset.search || "").toLowerCase();
+                const matchesType = selectedType === "todos" || rowType === selectedType;
+                const matchesSearch = !searchTerm || rowSearch.includes(searchTerm);
+                const isVisible = matchesType && matchesSearch;
+
+                row.classList.toggle("hidden", !isVisible);
+                if (isVisible) {
+                    visibleRows += 1;
+                }
+            });
+
+            if (databaseEmptyRow) {
+                databaseEmptyRow.classList.toggle("hidden", visibleRows > 0);
+            }
+        }
+
+        databaseSearchInput.addEventListener("input", filterDatabaseRows);
+        databaseTypeSelect.addEventListener("change", filterDatabaseRows);
+    </script>
 </body>
 </html>

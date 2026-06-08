@@ -21,6 +21,7 @@ class AlunoModel(Base):
     matricula: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
     curso_serie: Mapped[str | None] = mapped_column(String(80), nullable=True)
     status_matricula: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    foto_perfil: Mapped[str | None] = mapped_column(String(255), nullable=True)
     data_nascimento: Mapped[date | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[str] = mapped_column(TIMESTAMP, server_default=func.current_timestamp())
 

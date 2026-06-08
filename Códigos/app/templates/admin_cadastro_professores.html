@@ -38,6 +38,9 @@
             <a href="{{ url_for('home.admin_disciplinas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
                 <span>📚</span> Disciplinas
             </a>
+            <a href="{{ url_for('home.admin_turmas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
+                <span>🏫</span> Turmas
+            </a>
             <a href="{{ url_for('home.admin_comunicados') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
                 <span>📢</span> Comunicados
             </a>
@@ -70,7 +73,7 @@
         </header>
 
             <div class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_368px]">
-                <form id="teacher-form" class="glass-card cadastro-card rounded-[32px] px-6 py-8 md:px-10 lg:px-10">
+                <form id="teacher-form" class="glass-card cadastro-card rounded-[32px] px-6 py-8 md:px-10 lg:px-10" enctype="multipart/form-data">
                     <section>
                         <h2 class="text-xl font-extrabold text-white">Informações Gerais</h2>
                         <div class="mt-5 border-t border-white/10 pt-7">
@@ -167,7 +170,7 @@
                     <section class="glass-card cadastro-card rounded-[32px] px-8 py-9">
                         <h2 class="text-lg font-extrabold text-white">Foto do Professor</h2>
                         <label class="mx-auto mt-7 flex aspect-square w-40 cursor-pointer flex-col items-center justify-center rounded-[22px] border-2 border-dashed border-cyan-400/35 bg-white/5 text-center transition hover:border-cyan-300 hover:bg-white/10">
-                            <input type="file" class="sr-only" accept="image/png,image/jpeg">
+                            <input type="file" name="foto_perfil" form="teacher-form" class="sr-only" accept="image/png,image/jpeg">
                             <i data-lucide="circle-user-round" class="h-12 w-12 text-slate-400"></i>
                             <span class="mt-3 text-xs text-slate-400">Carregar Imagem</span>
                         </label>
@@ -197,22 +200,10 @@
             event.preventDefault();
 
             const formData = new FormData(teacherForm);
-            const payload = {
-                nome: formData.get("nome"),
-                cpf: formData.get("cpf"),
-                telefone: formData.get("telefone"),
-                disciplina: formData.get("disciplina"),
-                formacao: formData.get("formacao"),
-                regime: formData.get("regime"),
-                data_admissao: formData.get("data_admissao"),
-                email: formData.get("email"),
-                senha: formData.get("senha")
-            };
 
             fetch("{{ url_for('auth.cadastro_professor') }}", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                body: formData
             })
                 .then(function (response) {
                     return response.json().then(function (data) {

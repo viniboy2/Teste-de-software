@@ -1,12 +1,33 @@
+import os
+from uuid import uuid4
+
 from flask import Blueprint, jsonify, redirect, request, send_from_directory, session
 from werkzeug.utils import secure_filename
 
 from app.auth import decode_token_from_request, normalize_role
 from app.controllers.document_controller import get_upload_folder, upload_documento
 from app.database import get_session
-from app.models import AlunoModel, DocumentoModel
+from app.models import (
+    AlunoModel,
+    AlunoTurmaModel,
+    AtividadeModel,
+    DisciplinaModel,
+    DocumentoModel,
+    ProfessorModel,
+)
 
 document_bp = Blueprint("document", __name__)
+
+
+def _get_or_create_disciplina_geral(db):
+    disciplina = db.query(DisciplinaModel).filter(DisciplinaModel.codigo == "GERAL").first()
+    if disciplina:
+        return disciplina
+
+    disciplina = DisciplinaModel(nome="Geral", codigo="GERAL", carga_horaria=0)
+    db.add(disciplina)
+    db.flush()
+    return disciplina
 
 
 @document_bp.route('/arquivos/upload', methods=['POST'])
@@ -56,14 +77,112 @@ def download_arquivo(filename):
                 )
                 .first()
             )
+            atividade = (
+                db.query(AtividadeModel)
+                .join(AlunoTurmaModel, AlunoTurmaModel.turma_id == AtividadeModel.turma_id)
+                .join(AlunoModel, AlunoModel.id == AlunoTurmaModel.aluno_id)
+                .filter(
+                    AlunoModel.usuario_id == session.get("user_id"),
+                    AtividadeModel.caminho_arquivo == safe_filename,
+                )
+                .first()
+            )
         finally:
             db.close()
 
-        if not documento:
+        if not documento and not atividade:
             return jsonify({"erro": "Arquivo nao encontrado para este aluno"}), 404
+    elif role == "professor":
+        db = get_session()
+        try:
+            documento = (
+                db.query(DocumentoModel)
+                .join(ProfessorModel, ProfessorModel.id == DocumentoModel.professor_id)
+                .filter(
+                    ProfessorModel.usuario_id == session.get("user_id"),
+                    DocumentoModel.caminho_arquivo == safe_filename,
+                )
+                .first()
+            )
+            atividade = (
+                db.query(AtividadeModel)
+                .join(ProfessorModel, ProfessorModel.id == AtividadeModel.professor_id)
+                .filter(
+                    ProfessorModel.usuario_id == session.get("user_id"),
+                    AtividadeModel.caminho_arquivo == safe_filename,
+                )
+                .first()
+            )
+        finally:
+            db.close()
+
+        if not documento and not atividade:
+            return jsonify({"erro": "Arquivo nao encontrado para este professor"}), 404
     elif role != "admin":
         _, error_response = decode_token_from_request()
         if error_response:
             return error_response
 
     return send_from_directory(get_upload_folder(), safe_filename, as_attachment=True)
+
+
+@document_bp.route('/professores/<int:professor_id>/arquivos/upload', methods=['POST'])
+def upload_arquivo_professor(professor_id):
+    if normalize_role(session.get("user_role")) != "admin":
+        return jsonify({"erro": "Acesso permitido apenas para administradores"}), 403
+
+    if "arquivo" not in request.files:
+        return jsonify({"erro": "Arquivo nao enviado"}), 400
+
+    arquivo = request.files["arquivo"]
+    if not arquivo.filename:
+        return jsonify({"erro": "Nome do arquivo nao informado"}), 400
+
+    original_filename = secure_filename(arquivo.filename)
+    if not original_filename:
+        return jsonify({"erro": "Nome do arquivo invalido"}), 400
+
+    upload_folder = get_upload_folder()
+    os.makedirs(upload_folder, exist_ok=True)
+    filename = f"{uuid4().hex}_{original_filename}"
+    saved_path = os.path.join(upload_folder, filename)
+
+    db = get_session()
+    try:
+        professor = db.get(ProfessorModel, professor_id)
+        if not professor:
+            return jsonify({"erro": "Professor nao encontrado"}), 404
+
+        disciplina = _get_or_create_disciplina_geral(db)
+        arquivo.save(saved_path)
+        documento = DocumentoModel(
+            aluno_id=None,
+            professor_id=professor.id,
+            disciplina_id=disciplina.id,
+            titulo=(request.form.get("titulo") or original_filename)[:150],
+            caminho_arquivo=filename,
+        )
+        db.add(documento)
+        db.commit()
+    except Exception:
+        db.rollback()
+        if os.path.exists(saved_path):
+            os.remove(saved_path)
+        raise
+    finally:
+        db.close()
+
+    redirect_to = request.form.get("redirect_to")
+    if redirect_to and redirect_to.startswith("/"):
+        return redirect(redirect_to)
+
+    return jsonify({"mensagem": "Arquivo enviado"}), 201
+
+
+@document_bp.route('/arquivos/perfil/<path:filename>', methods=['GET'])
+def perfil_arquivo(filename):
+    safe_filename = secure_filename(filename)
+    if not safe_filename.startswith("perfil_"):
+        return jsonify({"erro": "Arquivo nao encontrado"}), 404
+
+    return send_from_directory(get_upload_folder(), safe_filename)

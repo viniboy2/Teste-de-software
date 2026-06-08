@@ -34,6 +34,10 @@ function login(event) {
             window.location.href = "/aluno";
             return;
         }
+        if (data.tipo === "PROFESSOR") {
+            window.location.href = "/professor";
+            return;
+        }
 
         throw new Error("Tipo de usuário sem área configurada");
     })

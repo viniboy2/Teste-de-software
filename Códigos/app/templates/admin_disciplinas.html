@@ -37,6 +37,9 @@
             <a href="{{ url_for('home.admin_disciplinas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                 <span>📚</span> Disciplinas
             </a>
+            <a href="{{ url_for('home.admin_turmas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
+                <span>🏫</span> Turmas
+            </a>
             <a href="{{ url_for('home.admin_comunicados') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-300 hover:text-white">
                 <span>📢</span> Comunicados
             </a>
@@ -127,35 +130,7 @@
             </section>
         </div>
 
-        <section class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
-            <form action="{{ url_for('home.admin_disciplinas') }}" method="post" class="glass-card discipline-card rounded-[32px] p-8">
-                <input type="hidden" name="action" value="associate_student">
-                <h2 class="text-xl font-bold">Associar Aluno</h2>
-                <p class="mt-1 text-sm text-gray-400">Vincule um aluno a uma disciplina cadastrada.</p>
-
-                <label class="discipline-field">
-                    <span>Aluno</span>
-                    <select name="aluno_id" required>
-                        <option value="">Selecione um aluno</option>
-                        {% for aluno in alunos %}
-                        <option value="{{ aluno.id }}">{{ aluno.nome }} - {{ aluno.matricula }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-
-                <label class="discipline-field">
-                    <span>Disciplina</span>
-                    <select name="disciplina_id" required>
-                        <option value="">Selecione uma disciplina</option>
-                        {% for disciplina in disciplinas %}
-                        <option value="{{ disciplina.id }}">{{ disciplina.nome }} - {{ disciplina.codigo }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-
-                <button class="discipline-submit">Associar Aluno</button>
-            </form>
-
+        <section class="grid grid-cols-1 xl:grid-cols-[380px_minmax(0,1fr)] gap-8 mt-8">
             <form action="{{ url_for('home.admin_disciplinas') }}" method="post" class="glass-card discipline-card rounded-[32px] p-8">
                 <input type="hidden" name="action" value="associate_teacher">
                 <h2 class="text-xl font-bold">Associar Professor</h2>
@@ -183,28 +158,6 @@
 
                 <button class="discipline-submit">Associar Professor</button>
             </form>
-        </section>
-
-        <section class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
-            <div class="glass-card discipline-card rounded-[32px] p-8">
-                <h2 class="text-xl font-bold">Alunos por Disciplina</h2>
-                <div class="discipline-link-list">
-                    {% for vinculo in aluno_vinculos %}
-                    <article class="discipline-link-item">
-                        <div>
-                            <h3>{{ vinculo.aluno }}</h3>
-                            <p>{{ vinculo.matricula }}</p>
-                        </div>
-                        <div class="text-right">
-                            <strong>{{ vinculo.disciplina }}</strong>
-                            <span>{{ vinculo.codigo }}</span>
-                        </div>
-                    </article>
-                    {% else %}
-                    <div class="discipline-empty">Nenhum aluno associado ainda.</div>
-                    {% endfor %}
-                </div>
-            </div>
 
             <div class="glass-card discipline-card rounded-[32px] p-8">
                 <h2 class="text-xl font-bold">Professores por Disciplina</h2>

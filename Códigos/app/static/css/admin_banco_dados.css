@@ -78,6 +78,28 @@
     font-weight: 800;
 }
 
+.type-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.type-student {
+    border: 1px solid rgba(34, 211, 238, 0.18);
+    background: rgba(34, 211, 238, 0.1);
+    color: #67e8f9;
+}
+
+.type-teacher {
+    border: 1px solid rgba(168, 85, 247, 0.18);
+    background: rgba(168, 85, 247, 0.1);
+    color: #c084fc;
+}
+
 .status-active {
     border: 1px solid rgba(34, 197, 94, 0.18);
     background: rgba(34, 197, 94, 0.1);

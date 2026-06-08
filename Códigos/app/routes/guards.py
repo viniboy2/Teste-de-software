@@ -15,6 +15,11 @@ def admin_json_required():
     return None
 
 
-def student_required():
+def aluno_required():
     if normalize_role(session.get("user_role")) != "aluno":
+        abort(403)
+
+
+def teacher_required():
+    if normalize_role(session.get("user_role")) != "professor":
         abort(403)
