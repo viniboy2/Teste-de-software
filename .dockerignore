@@ -6,8 +6,9 @@ venv
 **/*.pyc
 **/.env
 **/.env.*
-Documentos/*
-!Documentos/PROTOCOLO_DESIGN.md
-Protótipo
+docs/*
+!docs/PROTOCOLO_DESIGN.md
 **/uploads
 **/certs
+**/node_modules
+api/app/static/dist
